@@ -1,4 +1,4 @@
-package github.pancras.txmanager.store;
+package github.pancras.core.store;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -15,12 +15,11 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 
-import github.pancras.txmanager.dto.BranchTx;
-import github.pancras.txmanager.store.TxStore;
+import github.pancras.core.dto.BranchTx;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 事务存储管理器
+ * 使用Zookeeper实现的事务存储管理器
  */
 @Slf4j
 public enum ZkTxStore implements TxStore {

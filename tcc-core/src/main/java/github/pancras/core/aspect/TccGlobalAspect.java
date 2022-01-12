@@ -1,4 +1,4 @@
-package github.pancras.txmanager.aspect;
+package github.pancras.core.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -7,10 +7,10 @@ import org.aspectj.lang.annotation.Aspect;
 import java.util.List;
 import java.util.UUID;
 
-import github.pancras.txmanager.dto.BranchTx;
-import github.pancras.txmanager.dto.TccActionContext;
-import github.pancras.txmanager.store.TxStore;
-import github.pancras.txmanager.store.ZkTxStore;
+import github.pancras.core.dto.BranchTx;
+import github.pancras.core.dto.TccActionContext;
+import github.pancras.core.store.TxStore;
+import github.pancras.core.store.ZkTxStore;
 import lombok.extern.slf4j.Slf4j;
 
 @Aspect
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TccGlobalAspect {
     private final TxStore txStore = ZkTxStore.INSTANCE;
 
-    @Around("@annotation(github.pancras.txmanager.annotation.TccGlobal)")
+    @Around("@annotation(github.pancras.core.annotation.TccGlobal)")
     public Object invoke(ProceedingJoinPoint point) {
         log.warn("切入TccGloabl");
         // 1. 创建全局事务ID

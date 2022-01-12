@@ -1,4 +1,4 @@
-package github.pancras.txmanager.dto;
+package github.pancras.core.dto;
 
 import java.io.Serializable;
 

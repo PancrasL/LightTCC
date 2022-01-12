@@ -3,8 +3,8 @@ package github.pancras.transfer.action.impl;
 import org.springframework.stereotype.Component;
 
 import github.pancras.transfer.action.FromTccAction;
-import github.pancras.txmanager.annotation.TccTry;
-import github.pancras.txmanager.dto.TccActionContext;
+import github.pancras.core.annotation.TccTry;
+import github.pancras.core.dto.TccActionContext;
 
 /**
  * 扣钱参与者实现

@@ -1,4 +1,4 @@
-package github.pancras.txmanager.aspect;
+package github.pancras.core.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -8,10 +8,10 @@ import org.aspectj.lang.reflect.MethodSignature;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
-import github.pancras.txmanager.annotation.TccTry;
-import github.pancras.txmanager.dto.BranchTx;
-import github.pancras.txmanager.dto.TccActionContext;
-import github.pancras.txmanager.ResourceManager;
+import github.pancras.core.annotation.TccTry;
+import github.pancras.core.dto.BranchTx;
+import github.pancras.core.dto.TccActionContext;
+import github.pancras.core.ResourceManager;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TccTryAspect {
     private final ResourceManager RM = ResourceManager.INSTANCE;
 
-    @Around("@annotation(github.pancras.txmanager.annotation.TccTry)")
+    @Around("@annotation(github.pancras.core.annotation.TccTry)")
     public Object invoke(ProceedingJoinPoint point) {
         // 1. 获取方法的注解信息
         MethodSignature signature = (MethodSignature) point.getSignature();

@@ -1,5 +1,8 @@
-package github.pancras.txmanager;
+package github.pancras.core;
 
+/**
+ * 被TccGlobalAspect依赖
+ */
 public enum TxManager {
     /**
      * 单例

@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import github.pancras.spring.annotation.RpcScan;
-import github.pancras.txmanager.annotation.EnableTcc;
+import github.pancras.core.annotation.EnableTcc;
 
 @SpringBootApplication
 @EnableTcc

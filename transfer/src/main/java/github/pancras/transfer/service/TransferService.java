@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import github.pancras.spring.annotation.RpcReference;
 import github.pancras.transfer.action.FromTccAction;
 import github.pancras.transfer.action.ToTccAction;
-import github.pancras.txmanager.annotation.TccGlobal;
-import github.pancras.txmanager.dto.TccActionContext;
+import github.pancras.core.annotation.TccGlobal;
+import github.pancras.core.dto.TccActionContext;
 
 @Service
 public class TransferService {

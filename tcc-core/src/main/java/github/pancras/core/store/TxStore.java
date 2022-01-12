@@ -1,10 +1,10 @@
-package github.pancras.txmanager.store;
+package github.pancras.core.store;
 
 import java.util.List;
 
-import github.pancras.txmanager.aspect.TccGlobalAspect;
-import github.pancras.txmanager.aspect.TccTryAspect;
-import github.pancras.txmanager.dto.BranchTx;
+import github.pancras.core.aspect.TccGlobalAspect;
+import github.pancras.core.aspect.TccTryAspect;
+import github.pancras.core.dto.BranchTx;
 
 public interface TxStore {
     /**

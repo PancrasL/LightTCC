@@ -1,4 +1,4 @@
-package github.pancras.txmanager;
+package github.pancras.core;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -13,10 +13,15 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import github.pancras.txmanager.dto.BranchTx;
-import github.pancras.txmanager.store.TxStore;
-import github.pancras.txmanager.store.ZkTxStore;
+import github.pancras.core.dto.BranchTx;
+import github.pancras.core.store.TxStore;
+import github.pancras.core.store.ZkTxStore;
 
+/**
+ * 被TccTryAspect依赖，具有如下功能：
+ * 1. 注册分支事务
+ * 2. 接收TxManager发来的提交/回滚请求并执行
+ */
 public enum ResourceManager {
     /**
      * 单例
@@ -30,7 +35,7 @@ public enum ResourceManager {
      */
     private ServerSocket server;
     private ExecutorService threadPool;
-    
+
     ResourceManager() {
         try {
             server = new ServerSocket();

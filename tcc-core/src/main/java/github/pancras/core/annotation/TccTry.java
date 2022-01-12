@@ -1,4 +1,4 @@
-package github.pancras.txmanager.annotation;
+package github.pancras.core.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;

@@ -1,4 +1,4 @@
-package github.pancras.txmanager.annotation;
+package github.pancras.core.annotation;
 
 import org.springframework.context.annotation.Import;
 
@@ -7,8 +7,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import github.pancras.txmanager.aspect.TccGlobalAspect;
-import github.pancras.txmanager.aspect.TccTryAspect;
+import github.pancras.core.aspect.TccGlobalAspect;
+import github.pancras.core.aspect.TccTryAspect;
 
 /**
  * 开启TCC切面支持
