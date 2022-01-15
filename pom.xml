@@ -10,9 +10,19 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>transfer</module>
         <module>server2</module>
         <module>lighttcc-core</module>
+        <!-- 以下模块均为测试样例 -->
+        <!-- TCC事务入口，一个交易行为 -->
+        <module>example-business</module>
+        <!-- TCC分支事务1，负责创建订单 -->
+        <module>example-order</module>
+        <!-- TCC分支事务2，负责扣除账户余额 -->
+        <module>example-balance</module>
+        <!-- TCC分支事务3，负责修改库存 -->
+        <module>example-stock</module>
+        <!-- order、account、stock服务的接口 -->
+        <module>example-api</module>
     </modules>
 
 </project>
