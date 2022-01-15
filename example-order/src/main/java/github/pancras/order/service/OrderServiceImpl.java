@@ -1,9 +1,11 @@
 package github.pancras.order.service;
 
 import github.pancras.api.OrderService;
+import github.pancras.spring.annotation.RpcService;
 import github.pancras.tcccore.annotation.TccTry;
 import github.pancras.tcccore.dto.TccActionContext;
 
+@RpcService
 public class OrderServiceImpl implements OrderService {
     @TccTry
     @Override
