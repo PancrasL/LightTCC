@@ -9,7 +9,7 @@ import github.pancras.business.service.BusinessService;
 @RestController
 public class BussinessController {
     @Autowired
-    BusinessService service;
+    private BusinessService service;
 
     @RequestMapping("/test")
     public String test() {

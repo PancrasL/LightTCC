@@ -20,7 +20,7 @@ public class TccGlobalAspect {
 
     @Around("@annotation(github.pancras.tcccore.annotation.TccGlobal)")
     public Object invoke(ProceedingJoinPoint point) {
-        log.warn("切入TccGloabl");
+        log.info("切入TccGloabl");
         // 1. 创建全局事务ID
         String xid = UUID.randomUUID().toString();
         txStore.writeXid(xid);
