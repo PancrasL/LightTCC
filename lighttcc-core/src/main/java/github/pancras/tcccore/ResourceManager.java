@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import github.pancras.tcccore.dto.BranchTx;
+import github.pancras.tcccore.dto.TccActionContext;
 import github.pancras.tcccore.store.TxStore;
 import github.pancras.tcccore.store.ZkTxStore;
 
@@ -56,7 +57,7 @@ public enum ResourceManager {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        });
+        }).start();
     }
 
     public void writeBranchTx(BranchTx branchTx) {
@@ -72,29 +73,32 @@ public enum ResourceManager {
     }
 
     private JSONObject handle(JSONObject jsonObject) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        JSONObject ret = new JSONObject();
         String command = (String) jsonObject.get("command");
         switch (command) {
             case "commit":
-                doCommit(jsonObject.getObject("branchTx", BranchTx.class));
+                doCommit(jsonObject.getObject("branchTx", BranchTx.class), jsonObject.getObject("context", TccActionContext.class));
+                ret.put("result", "commit");
                 break;
-            case "rollback":
-                doRollback(jsonObject.getObject("branchTx", BranchTx.class));
+            case "cancel":
+                doCancel(jsonObject.getObject("branchTx", BranchTx.class), jsonObject.getObject("context", TccActionContext.class));
+                ret.put("result", "cancel");
                 break;
             default:
                 break;
         }
-        return null;
+        return ret;
     }
 
-    private void doCommit(BranchTx branchTx) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    private void doCommit(BranchTx branchTx, TccActionContext context) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Object r = resources.get(branchTx.getResourceId());
-        Method method = r.getClass().getMethod(branchTx.getCommitMethod());
-        method.invoke(r);
+        Method method = r.getClass().getMethod(branchTx.getCommitMethod(), TccActionContext.class);
+        method.invoke(r, context);
     }
 
-    private void doRollback(BranchTx branchTx) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    private void doCancel(BranchTx branchTx, TccActionContext context) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Object r = resources.get(branchTx.getResourceId());
-        Method method = r.getClass().getMethod(branchTx.getRollbackMethod());
-        method.invoke(r);
+        Method method = r.getClass().getMethod(branchTx.getRollbackMethod(), TccActionContext.class);
+        method.invoke(r, context);
     }
 }
