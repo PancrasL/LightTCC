@@ -18,9 +18,8 @@ import lombok.extern.slf4j.Slf4j;
  * 在执行分支事务前将分支事务的状态上报到
  */
 @Aspect
-@Slf4j
 public class TccTryAspect {
-    private final ResourceManager RM = ResourceManager.INSTANCE;
+    private final ResourceManager resourceManager = ResourceManager.INSTANCE;
 
     @Around("@annotation(github.pancras.tcccore.annotation.TccTry)")
     public Object invoke(ProceedingJoinPoint point) {
@@ -31,7 +30,7 @@ public class TccTryAspect {
 
         // 2. 注册分支事务
         TccActionContext context = (TccActionContext) point.getArgs()[0];
-        RM.registResource(point.getTarget());
+        resourceManager.registResource(point.getTarget());
         registBranch(context, tccTry, point.getTarget().getClass().getCanonicalName());
         try {
             Object result = point.proceed();
@@ -48,7 +47,7 @@ public class TccTryAspect {
 
     private void registBranch(TccActionContext context, TccTry tccTry, String resourceId) {
         String branchId = UUID.randomUUID().toString();
-        BranchTx branch = new BranchTx(context.getXid(), branchId, tccTry.commitMethod(), tccTry.rollbackMethod(), resourceId, RM.getAddress());
-        RM.writeBranchTx(branch);
+        BranchTx branch = new BranchTx(context.getXid(), branchId, tccTry.commitMethod(), tccTry.rollbackMethod(), resourceId, resourceManager.getAddress());
+        resourceManager.writeBranchTx(branch);
     }
 }

@@ -21,8 +21,8 @@ class BusinessHandler {
     private BalanceService balanceService;
 
     public void doCreateBusiness(TccActionContext context) {
-        orderService.createOrder(context);
-        stockService.reduceStock(context);
+//        orderService.createOrder(context);
+//        stockService.reduceStock(context);
         balanceService.reduceBalance(context);
     }
 }

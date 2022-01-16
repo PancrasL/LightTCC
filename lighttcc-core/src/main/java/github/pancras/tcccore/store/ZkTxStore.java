@@ -86,7 +86,6 @@ public enum ZkTxStore implements TxStore {
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
-        log.info("创建ZNode：" + path);
     }
 
     private void createPathWithData(String path, byte[] data) {

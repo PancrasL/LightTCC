@@ -18,9 +18,7 @@ import github.pancras.tcccore.store.TxStore;
 import github.pancras.tcccore.store.ZkTxStore;
 
 /**
- * 被TccTryAspect依赖，具有如下功能：
- * 1. 注册分支事务
- * 2. 接收TxManager发来的提交/回滚请求并执行
+ * 被TccTryAspect依赖，具有如下功能： 1. 注册分支事务 2. 接收TxManager发来的提交/回滚请求并执行
  */
 public enum ResourceManager {
     /**
@@ -29,7 +27,7 @@ public enum ResourceManager {
     INSTANCE;
     private final TxStore txStore = ZkTxStore.INSTANCE;
     private final String address = "127.0.0.1:8010";
-    private HashMap<String, Object> resources;
+    private HashMap<String, Object> resources = new HashMap<>();
     /**
      * socket server
      */
@@ -37,26 +35,28 @@ public enum ResourceManager {
     private ExecutorService threadPool;
 
     ResourceManager() {
-        try {
-            server = new ServerSocket();
-            server.bind(new InetSocketAddress("127.0.0.1", 8010));
-            this.threadPool = Executors.newCachedThreadPool();
-            Socket socket;
-            while ((socket = server.accept()) != null) {
-                Socket finalSocket = socket;
-                threadPool.execute(() -> {
-                    try (ObjectInputStream in = new ObjectInputStream(finalSocket.getInputStream());
-                         ObjectOutputStream out = new ObjectOutputStream(finalSocket.getOutputStream())) {
-                        JSONObject jsonObj = (JSONObject) in.readObject();
-                        out.writeObject(handle(jsonObj));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
+        new Thread(() -> {
+            try {
+                server = new ServerSocket();
+                server.bind(new InetSocketAddress("127.0.0.1", 8010));
+                this.threadPool = Executors.newCachedThreadPool();
+                Socket socket;
+                while ((socket = server.accept()) != null) {
+                    Socket finalSocket = socket;
+                    threadPool.execute(() -> {
+                        try (ObjectInputStream in = new ObjectInputStream(finalSocket.getInputStream());
+                             ObjectOutputStream out = new ObjectOutputStream(finalSocket.getOutputStream())) {
+                            JSONObject jsonObj = (JSONObject) in.readObject();
+                            out.writeObject(handle(jsonObj));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     public void writeBranchTx(BranchTx branchTx) {

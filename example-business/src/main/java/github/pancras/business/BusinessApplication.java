@@ -10,7 +10,6 @@ import github.pancras.spring.RpcReferencePostProcessor;
 import github.pancras.tcccore.aspect.TccGlobalAspect;
 
 @SpringBootApplication
-
 public class BusinessApplication {
     @Bean
     public RpcReferencePostProcessor rpcReferencePostProcessor() {
