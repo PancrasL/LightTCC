@@ -17,10 +17,9 @@
     </properties>
 
     <modules>
-        <module>server2</module>
         <module>lighttcc-core</module>
         <!-- 以下模块均为测试样例 -->
-        <!-- TCC事务入口，一个交易行为 -->
+        <!-- TCC全局事务入口，产生一个交易行为 -->
         <module>example-business</module>
         <!-- TCC分支事务1，负责创建订单 -->
         <module>example-order</module>
