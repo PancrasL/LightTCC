@@ -30,10 +30,15 @@ public enum TxManager {
     TxManager() {
     }
 
-    public String newGlobalTransaction() {
+    /**
+     * 生成全局事务ID
+     *
+     * @return Xid
+     */
+    public String newXid() {
         String xid = UUID.randomUUID().toString();
         txStore.writeXid(xid);
-        log.info("创建全局事务：" + xid);
+        log.info("创建全局事务ID：" + xid);
         return xid;
     }
 
@@ -45,30 +50,24 @@ public enum TxManager {
         txStore.deleteXid(xid);
     }
 
-    public boolean doCommit(BranchTx branchTx, TccActionContext context) {
-        JSONObject jsonObject = sendMessage(branchTx.getResourceAddress(), commitMsg(branchTx, context));
-        return true;
+    public boolean branchCommit(BranchTx branchTx, TccActionContext context) {
+        JSONObject sendMsg = new JSONObject();
+        sendMsg.put("command", "commit");
+        sendMsg.put("branchTx", branchTx);
+        sendMsg.put("context", context);
+        String address = branchTx.getResourceAddress();
+        JSONObject recvMsg = sendMessage(address, sendMsg);
+        return "success".equals(recvMsg.get("result"));
     }
 
-    public boolean doCancel(BranchTx branchTx, TccActionContext context) {
-        JSONObject jsonObject = sendMessage(branchTx.getResourceAddress(), cancelMsg(branchTx, context));
-        return true;
-    }
-
-    private JSONObject commitMsg(BranchTx branchTx, TccActionContext context) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("command", "commit");
-        jsonObject.put("branchTx", branchTx);
-        jsonObject.put("context", context);
-        return jsonObject;
-    }
-
-    private JSONObject cancelMsg(BranchTx branchTx, TccActionContext context) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("command", "cancel");
-        jsonObject.put("branchTx", branchTx);
-        jsonObject.put("context", context);
-        return jsonObject;
+    public boolean branchCancel(BranchTx branchTx, TccActionContext context) {
+        JSONObject sendMsg = new JSONObject();
+        sendMsg.put("command", "cancel");
+        sendMsg.put("branchTx", branchTx);
+        sendMsg.put("context", context);
+        String address = branchTx.getResourceAddress();
+        JSONObject recvMsg = sendMessage(address, sendMsg);
+        return "success".equals(recvMsg.get("result"));
     }
 
     private JSONObject sendMessage(String address, JSONObject jsonObject) {

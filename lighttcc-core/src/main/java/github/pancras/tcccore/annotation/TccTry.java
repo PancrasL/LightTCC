@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 
 /**
  * 被@TccTry注解的方法是TCC分支事务(branchTx)，在执行该方法时会被TccTryAspect切入
+ * commit和rollback方法的参数仅支持TccActionContext
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

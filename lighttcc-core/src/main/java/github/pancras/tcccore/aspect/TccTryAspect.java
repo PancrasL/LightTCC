@@ -6,13 +6,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 
 import java.lang.reflect.Method;
-import java.util.UUID;
 
-import github.pancras.tcccore.annotation.TccTry;
-import github.pancras.tcccore.dto.BranchTx;
-import github.pancras.tcccore.dto.TccActionContext;
 import github.pancras.tcccore.ResourceManager;
-import lombok.extern.slf4j.Slf4j;
+import github.pancras.tcccore.annotation.TccTry;
+import github.pancras.tcccore.dto.TccActionContext;
 
 /**
  * 在执行分支事务前将分支事务的状态上报到
@@ -30,8 +27,10 @@ public class TccTryAspect {
 
         // 2. 注册分支事务
         TccActionContext context = (TccActionContext) point.getArgs()[0];
-        resourceManager.registResource(point.getTarget());
-        registBranch(context, tccTry, point.getTarget().getClass().getCanonicalName());
+        String commitMethod = tccTry.commitMethod();
+        String rollbackMethod = tccTry.rollbackMethod();
+        Object target = point.getTarget();
+        resourceManager.registBranch(context, commitMethod, rollbackMethod, target);
         try {
             Object result = point.proceed();
             // 2.1 tccTry执行成功
@@ -43,11 +42,5 @@ public class TccTryAspect {
             // 2.2 tccTry执行失败，返回false
             return false;
         }
-    }
-
-    private void registBranch(TccActionContext context, TccTry tccTry, String resourceId) {
-        String branchId = UUID.randomUUID().toString();
-        BranchTx branch = new BranchTx(context.getXid(), branchId, tccTry.commitMethod(), tccTry.rollbackMethod(), resourceId, resourceManager.getAddress());
-        resourceManager.writeBranchTx(branch);
     }
 }

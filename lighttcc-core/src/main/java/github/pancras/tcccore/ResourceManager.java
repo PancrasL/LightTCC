@@ -10,6 +10,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -60,32 +61,36 @@ public enum ResourceManager {
         }).start();
     }
 
-    public void writeBranchTx(BranchTx branchTx) {
+    public void registBranch(TccActionContext context, String commitMethod, String rollbackMethod, Object resource) {
+        String resourceId = resource.getClass().getCanonicalName();
+        resources.put(resourceId, resource);
+        BranchTx branchTx = new BranchTx();
+        branchTx.setBranchId(UUID.randomUUID().toString());
+        branchTx.setResourceId(resourceId);
+        branchTx.setResourceAddress(address);
+        branchTx.setCommitMethod(commitMethod);
+        branchTx.setRollbackMethod(rollbackMethod);
+        branchTx.setXid(context.getXid());
+
         txStore.writeBranchTx(branchTx);
-    }
-
-    public void registResource(Object obj) {
-        resources.put(obj.getClass().getCanonicalName(), obj);
-    }
-
-    public String getAddress() {
-        return address;
     }
 
     private JSONObject handle(JSONObject jsonObject) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         JSONObject ret = new JSONObject();
         String command = (String) jsonObject.get("command");
+        BranchTx branchTx = jsonObject.getObject("branchTx", BranchTx.class);
+        TccActionContext context = jsonObject.getObject("context", TccActionContext.class);
         switch (command) {
             case "commit":
-                doCommit(jsonObject.getObject("branchTx", BranchTx.class), jsonObject.getObject("context", TccActionContext.class));
-                ret.put("result", "commit");
+                doCommit(branchTx, context);
+                ret.put("result", "success");
                 break;
             case "cancel":
-                doCancel(jsonObject.getObject("branchTx", BranchTx.class), jsonObject.getObject("context", TccActionContext.class));
-                ret.put("result", "cancel");
+                doCancel(branchTx, context);
+                ret.put("result", "success");
                 break;
             default:
-                break;
+                throw new IllegalStateException("Illegal command: " + command);
         }
         return ret;
     }

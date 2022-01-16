@@ -16,7 +16,7 @@ import github.pancras.wrapper.RpcServiceConfig;
 public class BalanceApplication {
     @Bean
     public NettyRpcServer rpcServer() {
-        return new NettyRpcServer("localhost:7000", "zookeeper://localhost:2181");
+        return new NettyRpcServer("localhost:7070", "zookeeper://localhost:2181");
     }
 
     @Bean
