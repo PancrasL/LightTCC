@@ -21,7 +21,7 @@ public class BusinessService {
     @TccGlobal
     public void createBussiness(TccActionContext context) {
         orderService.createOrder(context);
-        //stockService.reduceStock(context);
-        //balanceService.reduceBalance(context);
+        stockService.reduceStock(context);
+        balanceService.reduceBalance(context);
     }
 }

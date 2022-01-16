@@ -1,16 +1,16 @@
-package github.pancras.stock.service;
+package github.pancras.balance.service;
 
-import github.pancras.api.StockService;
+import github.pancras.api.BalanceService;
 import github.pancras.spring.annotation.RpcService;
 import github.pancras.tcccore.annotation.TccTry;
 import github.pancras.tcccore.dto.TccActionContext;
 
 @RpcService
-public class StockServiceImpl implements StockService {
+public class BalanceServiceImpl implements BalanceService {
     @TccTry
     @Override
-    public boolean reduceStock(TccActionContext context) {
-        System.out.println("reduce Stock");
+    public boolean reduceBalance(TccActionContext context) {
+        System.out.println("reduce balance");
         return false;
     }
 
