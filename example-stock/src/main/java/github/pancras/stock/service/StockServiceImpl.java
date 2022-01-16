@@ -1,15 +1,15 @@
-package github.pancras.order.service;
+package github.pancras.stock.service;
 
-import github.pancras.api.OrderService;
+import github.pancras.api.StockService;
 import github.pancras.spring.annotation.RpcService;
 import github.pancras.tcccore.annotation.TccTry;
 import github.pancras.tcccore.dto.TccActionContext;
 
 @RpcService
-public class OrderServiceImpl implements OrderService {
+public class StockServiceImpl implements StockService {
     @TccTry
     @Override
-    public boolean createOrder(TccActionContext context) {
+    public boolean reduceStock(TccActionContext context) {
         System.out.println("create Order");
         return false;
     }

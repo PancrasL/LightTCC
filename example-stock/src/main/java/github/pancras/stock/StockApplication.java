@@ -1,6 +1,5 @@
-package github.pancras.order;
+package github.pancras.stock;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -10,15 +9,15 @@ import github.pancras.remoting.transport.netty.server.NettyRpcServer;
 import github.pancras.spring.RpcServicePostProcessor;
 
 @SpringBootApplication
-public class OrderApplication {
+public class StockApplication {
     @Bean
     public RpcServicePostProcessor rpcServiceConfig() {
-        NettyRpcServer server = new NettyRpcServer("localhost:7001", "zookeeper://localhost:2181");
+        NettyRpcServer server = new NettyRpcServer("localhost:7002", "zookeeper://localhost:2181");
         return new RpcServicePostProcessor(server);
     }
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(OrderApplication.class)
+        new SpringApplicationBuilder(StockApplication.class)
                 .web(WebApplicationType.NONE)
                 .run(args);
     }
