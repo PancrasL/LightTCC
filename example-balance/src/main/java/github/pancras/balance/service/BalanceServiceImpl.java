@@ -12,18 +12,18 @@ public class BalanceServiceImpl implements BalanceService {
     @Override
     public boolean reduceBalance(TccActionContext context) {
         System.out.println("reduce balance");
-        return false;
+        return true;
     }
 
     @Override
     public boolean commit(TccActionContext context) {
         System.out.println("reduce commit");
-        return false;
+        return true;
     }
 
     @Override
     public boolean rollback(TccActionContext context) {
         System.out.println("reduce rollback");
-        return false;
+        return true;
     }
 }

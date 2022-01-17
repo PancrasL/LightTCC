@@ -13,7 +13,7 @@ public class BusinessService {
 
     /**
      * 由于@TccGlobal使用了aspectJ技术，BusinessServer Bean会被CGlib动态代理，LightRPC的RpcReferencePostProcessor中获得的businessService
-     * Bean是一个代理对象， 这导致无法获取到@RpcReference Field，所以我将@RpcRefence放在不会被动态代理的BusinessHandler类中。
+     * Bean是一个代理对象， 这导致无法获取到@RpcReference Field，所以将@RpcRefence放在不会被动态代理的BusinessHandler类中。
      */
     @TccGlobal
     public void createBussiness(TccActionContext context) {

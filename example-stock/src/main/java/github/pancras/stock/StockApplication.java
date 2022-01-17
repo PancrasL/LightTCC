@@ -10,14 +10,19 @@ import github.pancras.api.StockService;
 import github.pancras.remoting.transport.netty.server.NettyRpcServer;
 import github.pancras.spring.RpcServicePostProcessor;
 import github.pancras.stock.service.StockServiceImpl;
+import github.pancras.tcccore.aspect.TccTryAspect;
 import github.pancras.wrapper.RpcServiceConfig;
 
 @SpringBootApplication
 public class StockApplication {
     @Bean
-    public RpcServicePostProcessor rpcServiceConfig() {
-        NettyRpcServer server = new NettyRpcServer("localhost:7002", "zookeeper://localhost:2181");
-        return new RpcServicePostProcessor(server);
+    public NettyRpcServer rpcServer() {
+        return new NettyRpcServer("localhost:7072", "zookeeper://localhost:2181");
+    }
+
+    @Bean
+    public TccTryAspect tccTryAspect() {
+        return new TccTryAspect();
     }
 
     public static void main(String[] args) throws Exception {

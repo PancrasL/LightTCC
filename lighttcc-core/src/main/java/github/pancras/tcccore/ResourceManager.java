@@ -2,11 +2,11 @@ package github.pancras.tcccore;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public enum ResourceManager {
      */
     INSTANCE;
     private final TxStore txStore = ZkTxStore.INSTANCE;
-    private final String address = "127.0.0.1:8010";
+    private final String address;
     private HashMap<String, Object> resources = new HashMap<>();
     /**
      * socket server
@@ -37,28 +37,36 @@ public enum ResourceManager {
     private ExecutorService threadPool;
 
     ResourceManager() {
-        new Thread(() -> {
-            try {
-                server = new ServerSocket();
-                server.bind(new InetSocketAddress("127.0.0.1", 8010));
-                this.threadPool = Executors.newCachedThreadPool();
-                Socket socket;
-                while ((socket = server.accept()) != null) {
-                    Socket finalSocket = socket;
-                    threadPool.execute(() -> {
-                        try (ObjectInputStream in = new ObjectInputStream(finalSocket.getInputStream());
-                             ObjectOutputStream out = new ObjectOutputStream(finalSocket.getOutputStream())) {
-                            JSONObject jsonObj = (JSONObject) in.readObject();
-                            out.writeObject(handle(jsonObj));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    });
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+        try {
+            server = new ServerSocket(0);
+            int localPort = server.getLocalPort();
+            address = "127.0.0.1:" + localPort;
+            this.threadPool = Executors.newCachedThreadPool();
+            Thread serverThread = new Thread(() -> listen());
+            serverThread.start();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    private void listen() {
+        try {
+            Socket socket;
+            while ((socket = server.accept()) != null) {
+                Socket finalSocket = socket;
+                threadPool.execute(() -> {
+                    try (ObjectInputStream in = new ObjectInputStream(finalSocket.getInputStream());
+                         ObjectOutputStream out = new ObjectOutputStream(finalSocket.getOutputStream())) {
+                        JSONObject jsonObj = (JSONObject) in.readObject();
+                        out.writeObject(handle(jsonObj));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
             }
-        }).start();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     public void registBranch(TccActionContext context, String commitMethod, String rollbackMethod, Object resource) {

@@ -21,8 +21,14 @@ class BusinessHandler {
     private BalanceService balanceService;
 
     public void doCreateBusiness(TccActionContext context) {
-//        orderService.createOrder(context);
-//        stockService.reduceStock(context);
-        balanceService.reduceBalance(context);
+        if (!orderService.createOrder(context)) {
+            throw new RuntimeException("创建订单失败");
+        }
+        if (!stockService.reduceStock(context)) {
+            throw new RuntimeException("减少库存失败");
+        }
+        if (!balanceService.reduceBalance(context)) {
+            throw new RuntimeException("扣款失败");
+        }
     }
 }
